@@ -7,7 +7,7 @@ defmodule CodeCorpsWeb.TaskController do
     sort_by_order: 1, task_list_filter: 2, task_status_filter: 2
   ]
 
-  alias CodeCorps.Task
+  alias CodeCorps.{Task, Services.TaskService}
 
   plug :load_and_authorize_changeset, model: Task, only: [:create]
   plug :load_and_authorize_resource, model: Task, only: [:update]
@@ -42,9 +42,9 @@ defmodule CodeCorpsWeb.TaskController do
   end
   def record(_conn, id), do: Task |> Repo.get(id)
 
-  @spec handle_create(Plug.Conn.t, map) :: Ecto.Changeset.t
-  def handle_create(_conn, attributes) do
-    %Task{} |> Task.create_changeset(attributes)
+  @spec handle_create(Plug.Conn.t, map) :: {:ok, Task.t} | {:error, Ecto.Changeset.t}
+  def handle_create(conn, attributes) do
+    TaskService.create_task(conn, attributes)
   end
 
   @spec handle_update(Plug.Conn.t, Task.t, map) :: Ecto.Changeset.t

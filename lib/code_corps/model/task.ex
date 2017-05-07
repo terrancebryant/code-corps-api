@@ -50,21 +50,17 @@ defmodule CodeCorps.Task do
     |> put_change(:status, "open")
   end
 
-  @doc """
-  Builds a changeset for creating a task that has a connected GitHub issue.
-  """
-  def github_create_changeset(struct, params) do
-    struct
-    |> create_changeset(params)
-    |> cast(params, [:github_id])
-    |> validate_required([:github_id])
-  end
-
   def update_changeset(struct, params) do
     struct
     |> changeset(params)
     |> cast(params, [:status])
     |> validate_inclusion(:status, statuses())
+  end
+
+  def github_changeset(struct, params) do
+    struct
+    |> cast(params, [:github_id])
+    |> validate_required([:github_id])
   end
 
   def apply_position(changeset) do
