@@ -2,21 +2,21 @@ defmodule CodeCorps.Policy.TaskTest do
   use CodeCorps.PolicyCase
 
   import CodeCorps.Policy.Task, only: [create?: 2, update?: 2]
-  import CodeCorps.Task, only: [create_changeset: 2]
 
   alias CodeCorps.Task
+  alias Ecto.Changeset
 
   describe "create?" do
     test "returns true when user is task author" do
       user = insert(:user)
-      changeset = %Task{} |> create_changeset(%{user_id: user.id})
+      changeset = %Task{} |> Changeset.change(%{user_id: user.id})
 
       assert create?(user, changeset)
     end
 
     test "returns false when user is not the author" do
       user = insert(:user)
-      changeset = %Task{} |> create_changeset(%{user_id: -1})
+      changeset = %Task{} |> Changeset.change(%{user_id: -1})
 
       refute create?(user, changeset)
     end

@@ -1,5 +1,4 @@
 defmodule CodeCorps.GitHub do
-  alias CodeCorps.{User, Task, Repo}
   alias CodeCorps.Github.JWT
 
   @client_id Application.get_env(:code_corps, :github_app_client_id)

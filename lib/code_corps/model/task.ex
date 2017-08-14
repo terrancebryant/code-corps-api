@@ -14,10 +14,11 @@ defmodule CodeCorps.Task do
     field :order, :integer
     field :status, :string, default: "open"
     field :title, :string
-    field :github_id, :integer
+    field :github_issue_number, :integer
 
     field :position, :integer, virtual: true
 
+    belongs_to :github_repo, CodeCorps.GithubRepo
     belongs_to :project, CodeCorps.Project
     belongs_to :task_list, CodeCorps.TaskList
     belongs_to :user, CodeCorps.User
@@ -40,27 +41,11 @@ defmodule CodeCorps.Task do
     |> MarkdownRendererService.render_markdown_to_html(:markdown, :body)
   end
 
-  def create_changeset(struct, params) do
-    struct
-    |> changeset(params)
-    |> cast(params, [:project_id, :user_id])
-    |> validate_required([:project_id, :user_id])
-    |> assoc_constraint(:project)
-    |> assoc_constraint(:user)
-    |> put_change(:status, "open")
-  end
-
   def update_changeset(struct, params) do
     struct
     |> changeset(params)
     |> cast(params, [:status])
     |> validate_inclusion(:status, statuses())
-  end
-
-  def github_changeset(struct, params) do
-    struct
-    |> cast(params, [:github_id])
-    |> validate_required([:github_id])
   end
 
   def apply_position(changeset) do
