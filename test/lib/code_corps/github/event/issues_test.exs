@@ -37,7 +37,7 @@ defmodule CodeCorps.GitHub.Event.IssuesTest do
     test "with unmatched user, creates user, creates task for each project associated to github repo" do
       %{
         "issue" => %{
-          "body" => markdown, "title" => title, "id" => github_id,
+          "body" => markdown, "title" => title, "number" => number,
           "user" => %{"id" => user_github_id}
         },
         "repository" => %{"id" => repo_github_id}
@@ -62,10 +62,11 @@ defmodule CodeCorps.GitHub.Event.IssuesTest do
 
       tasks |> Enum.each(fn task ->
         assert task.user_id == user.id
+        assert task.github_repo_id == github_repo.id
         assert task.project_id in project_ids
         assert task.markdown == markdown
         assert task.title == title
-        assert task.github_id == github_id
+        assert task.github_issue_number == number
         assert task.status == "open"
       end)
     end
@@ -86,7 +87,7 @@ defmodule CodeCorps.GitHub.Event.IssuesTest do
 
     test "with matched user, creates or updates task for each project associated to github repo" do
       %{
-        "issue" => %{"body" => markdown, "title" => title, "id" => github_id, "user" => %{"id" => user_github_id}},
+        "issue" => %{"body" => markdown, "title" => title, "number" => number, "user" => %{"id" => user_github_id}},
         "repository" => %{"id" => repo_github_id}
       } = @payload
 
@@ -101,7 +102,7 @@ defmodule CodeCorps.GitHub.Event.IssuesTest do
         |> Enum.map(&Map.get(&1, :project))
         |> Enum.map(&Map.get(&1, :id))
 
-      %{id: existing_task_id} = insert(:task, project: project, user: user, github_id: github_id)
+      %{id: existing_task_id} = insert(:task, project: project, user: user, github_repo: github_repo, github_issue_number: number)
 
       {:ok, tasks} = Issues.handle(@event, @payload)
 
@@ -109,10 +110,11 @@ defmodule CodeCorps.GitHub.Event.IssuesTest do
       assert Repo.aggregate(Task, :count, :id) == 3
 
       tasks |> Enum.each(fn task ->
+        assert task.github_repo_id == github_repo.id
         assert task.project_id in project_ids
         assert task.markdown == markdown
         assert task.title == title
-        assert task.github_id == github_id
+        assert task.github_issue_number == number
         assert task.status == "open"
       end)
 
@@ -155,7 +157,7 @@ defmodule CodeCorps.GitHub.Event.IssuesTest do
     test "with unmatched user, creates user, creates task for each project associated to github repo" do
       %{
         "issue" => %{
-          "body" => markdown, "title" => title, "id" => github_id,
+          "body" => markdown, "title" => title, "number" => number,
           "user" => %{"id" => user_github_id}
         },
         "repository" => %{"id" => repo_github_id}
@@ -180,10 +182,11 @@ defmodule CodeCorps.GitHub.Event.IssuesTest do
 
       tasks |> Enum.each(fn task ->
         assert task.user_id == user.id
+        assert task.github_repo_id == github_repo.id
         assert task.project_id in project_ids
         assert task.markdown == markdown
         assert task.title == title
-        assert task.github_id == github_id
+        assert task.github_issue_number == number
         assert task.status == "closed"
       end)
     end
@@ -204,7 +207,7 @@ defmodule CodeCorps.GitHub.Event.IssuesTest do
 
     test "with matched user, creates or updates task for each project associated to github repo" do
       %{
-        "issue" => %{"body" => markdown, "title" => title, "id" => github_id, "user" => %{"id" => user_github_id}},
+        "issue" => %{"body" => markdown, "title" => title, "number" => number, "user" => %{"id" => user_github_id}},
         "repository" => %{"id" => repo_github_id}
       } = @payload
 
@@ -219,7 +222,7 @@ defmodule CodeCorps.GitHub.Event.IssuesTest do
         |> Enum.map(&Map.get(&1, :project))
         |> Enum.map(&Map.get(&1, :id))
 
-      %{id: existing_task_id} = insert(:task, project: project, user: user, github_id: github_id)
+      %{id: existing_task_id} = insert(:task, project: project, user: user, github_repo: github_repo, github_issue_number: number)
 
       {:ok, tasks} = Issues.handle(@event, @payload)
 
@@ -227,10 +230,11 @@ defmodule CodeCorps.GitHub.Event.IssuesTest do
       assert Repo.aggregate(Task, :count, :id) == 3
 
       tasks |> Enum.each(fn task ->
+        assert task.github_repo_id == github_repo.id
         assert task.project_id in project_ids
         assert task.markdown == markdown
         assert task.title == title
-        assert task.github_id == github_id
+        assert task.github_issue_number == number
         assert task.status == "closed"
       end)
 
@@ -273,7 +277,7 @@ defmodule CodeCorps.GitHub.Event.IssuesTest do
     test "with unmatched user, creates user, creates task for each project associated to github repo" do
       %{
         "issue" => %{
-          "body" => markdown, "title" => title, "id" => github_id,
+          "body" => markdown, "title" => title, "number" => number,
           "user" => %{"id" => user_github_id}
         },
         "repository" => %{"id" => repo_github_id}
@@ -298,10 +302,11 @@ defmodule CodeCorps.GitHub.Event.IssuesTest do
 
       tasks |> Enum.each(fn task ->
         assert task.user_id == user.id
+        assert task.github_repo_id == github_repo.id
         assert task.project_id in project_ids
         assert task.markdown == markdown
         assert task.title == title
-        assert task.github_id == github_id
+        assert task.github_issue_number == number
         assert task.status == "open"
       end)
     end
@@ -322,7 +327,7 @@ defmodule CodeCorps.GitHub.Event.IssuesTest do
 
     test "with matched user, creates or updates task for each project associated to github repo" do
       %{
-        "issue" => %{"body" => markdown, "title" => title, "id" => github_id, "user" => %{"id" => user_github_id}},
+        "issue" => %{"body" => markdown, "title" => title, "number" => number, "user" => %{"id" => user_github_id}},
         "repository" => %{"id" => repo_github_id}
       } = @payload
 
@@ -337,7 +342,7 @@ defmodule CodeCorps.GitHub.Event.IssuesTest do
         |> Enum.map(&Map.get(&1, :project))
         |> Enum.map(&Map.get(&1, :id))
 
-      %{id: existing_task_id} = insert(:task, project: project, user: user, github_id: github_id)
+      %{id: existing_task_id} = insert(:task, project: project, user: user, github_repo: github_repo, github_issue_number: number)
 
       {:ok, tasks} = Issues.handle(@event, @payload)
 
@@ -345,10 +350,11 @@ defmodule CodeCorps.GitHub.Event.IssuesTest do
       assert Repo.aggregate(Task, :count, :id) == 3
 
       tasks |> Enum.each(fn task ->
+        assert task.github_repo_id == github_repo.id
         assert task.project_id in project_ids
         assert task.markdown == markdown
         assert task.title == title
-        assert task.github_id == github_id
+        assert task.github_issue_number == number
         assert task.status == "open"
       end)
 
@@ -391,7 +397,7 @@ defmodule CodeCorps.GitHub.Event.IssuesTest do
     test "with unmatched user, creates user, creates task for each project associated to github repo" do
       %{
         "issue" => %{
-          "body" => markdown, "title" => title, "id" => github_id,
+          "body" => markdown, "title" => title, "number" => number,
           "user" => %{"id" => user_github_id}
         },
         "repository" => %{"id" => repo_github_id}
@@ -416,10 +422,11 @@ defmodule CodeCorps.GitHub.Event.IssuesTest do
 
       tasks |> Enum.each(fn task ->
         assert task.user_id == user.id
+        assert task.github_repo_id == github_repo.id
         assert task.project_id in project_ids
         assert task.markdown == markdown
         assert task.title == title
-        assert task.github_id == github_id
+        assert task.github_issue_number == number
         assert task.status == "open"
       end)
     end
@@ -440,7 +447,7 @@ defmodule CodeCorps.GitHub.Event.IssuesTest do
 
     test "with matched user, creates or updates task for each project associated to github repo" do
       %{
-        "issue" => %{"body" => markdown, "title" => title, "id" => github_id, "user" => %{"id" => user_github_id}},
+        "issue" => %{"body" => markdown, "title" => title, "number" => number, "user" => %{"id" => user_github_id}},
         "repository" => %{"id" => repo_github_id}
       } = @payload
 
@@ -455,7 +462,7 @@ defmodule CodeCorps.GitHub.Event.IssuesTest do
         |> Enum.map(&Map.get(&1, :project))
         |> Enum.map(&Map.get(&1, :id))
 
-      %{id: existing_task_id} = insert(:task, project: project, user: user, github_id: github_id)
+      %{id: existing_task_id} = insert(:task, project: project, user: user, github_repo: github_repo, github_issue_number: number)
 
       {:ok, tasks} = Issues.handle(@event, @payload)
 
@@ -464,9 +471,10 @@ defmodule CodeCorps.GitHub.Event.IssuesTest do
 
       tasks |> Enum.each(fn task ->
         assert task.project_id in project_ids
+        assert task.github_repo_id == github_repo.id
         assert task.markdown == markdown
         assert task.title == title
-        assert task.github_id == github_id
+        assert task.github_issue_number == number
         assert task.status == "open"
       end)
 

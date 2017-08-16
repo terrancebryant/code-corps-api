@@ -13,7 +13,7 @@ defmodule CodeCorps.Project.Task do
   def create(%{} = attributes) do
     multi =
       Multi.new
-      |> Multi.insert(:task, attributes |> create_changeset)
+      |> Multi.insert(:task, %Task{} |> Task.create_changeset(attributes))
       |> Multi.run(:github, (fn %{task: %Task{} = task} -> task |> connect_to_github end))
 
     case multi |> Repo.transaction do
@@ -21,18 +21,6 @@ defmodule CodeCorps.Project.Task do
       {:error, :task, %Changeset{} = changeset, _steps} -> {:error, changeset}
       {:error, :github, _value, _steps} -> {:error, :github}
     end
-  end
-
-  @spec create_changeset(map) :: Changeset.t
-  defp create_changeset(%{} = params) do
-    %Task{}
-    |> Task.changeset(params)
-    |> Changeset.cast(params, [:project_id, :user_id, :github_repo_id])
-    |> Changeset.validate_required([:project_id, :user_id])
-    |> Changeset.assoc_constraint(:project)
-    |> Changeset.assoc_constraint(:user)
-    |> Changeset.assoc_constraint(:github_repo)
-    |> Changeset.put_change(:status, "open")
   end
 
   @spec connect_to_github(Task.t) :: {:ok, Task.t | :not_connected} :: {:error, any}
@@ -46,7 +34,7 @@ defmodule CodeCorps.Project.Task do
   end
 
   @spec link_with_github_changeset(Task.t, map) :: Changeset.t
-  defp link_with_github_changeset(%Task{} = task, %{"id" => github_issue_id}) do
-    task |> Changeset.change(%{github_issue_id: github_issue_id})
+  defp link_with_github_changeset(%Task{} = task, %{"number" => github_issue_number}) do
+    task |> Changeset.change(%{github_issue_number: github_issue_number})
   end
 end

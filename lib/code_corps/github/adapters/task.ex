@@ -5,7 +5,7 @@ defmodule CodeCorps.GitHub.Adapters.Task do
   """
 
   @mapping [
-    {:github_issue_id, ["id"]},
+    {:github_issue_number, ["number"]},
     {:markdown, ["body"]},
     {:status, ["state"]},
     {:title, ["title"]}

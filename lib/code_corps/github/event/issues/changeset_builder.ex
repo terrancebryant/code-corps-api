@@ -20,16 +20,18 @@ defmodule CodeCorps.GitHub.Event.Issues.ChangesetBuilder do
   def build_changeset(
     %Task{} = task,
     %{"issue" => issue_attrs},
-    %ProjectGithubRepo{project_id: project_id},
+    %ProjectGithubRepo{project_id: project_id, github_repo_id: github_repo_id},
     %User{id: user_id}) do
 
     task
     |> Changeset.change(issue_attrs |> TaskAdapter.from_issue())
     |> MarkdownRendererService.render_markdown_to_html(:markdown, :body)
     |> Changeset.put_change(:project_id, project_id)
+    |> Changeset.put_change(:github_repo_id, github_repo_id)
     |> Changeset.put_change(:user_id, user_id)
     |> Changeset.validate_required([:project_id, :user_id, :markdown, :body, :title])
     |> Changeset.assoc_constraint(:project)
+    |> Changeset.assoc_constraint(:github_repo)
     |> Changeset.assoc_constraint(:user)
   end
 end

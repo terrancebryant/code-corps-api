@@ -24,7 +24,7 @@ defmodule CodeCorps.GitHub.Event.Issues.ChangesetBuilderTest do
 
       # adapted fields
       assert get_change(changeset, :name) == payload["issue"]["name"]
-      assert get_change(changeset, :github_id) == payload["issue"]["id"]
+      assert get_change(changeset, :github_issue_number) == payload["issue"]["number"]
       assert get_change(changeset, :markdown) == payload["issue"]["body"]
       assert get_field(changeset, :status) == payload["issue"]["state"]
 

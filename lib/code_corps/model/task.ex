@@ -41,6 +41,18 @@ defmodule CodeCorps.Task do
     |> MarkdownRendererService.render_markdown_to_html(:markdown, :body)
   end
 
+  @spec create_changeset(struct, map) :: Ecto.Changeset.t
+  def create_changeset(struct, %{} = params) do
+    struct
+    |> changeset(params)
+    |> cast(params, [:project_id, :user_id, :github_repo_id])
+    |> validate_required([:project_id, :user_id])
+    |> assoc_constraint(:project)
+    |> assoc_constraint(:user)
+    |> assoc_constraint(:github_repo)
+    |> put_change(:status, "open")
+  end
+
   def update_changeset(struct, params) do
     struct
     |> changeset(params)

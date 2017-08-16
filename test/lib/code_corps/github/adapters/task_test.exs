@@ -12,7 +12,7 @@ defmodule CodeCorps.GitHub.Adapters.TaskTest do
       %{"issue" => payload} = load_event_fixture("issues_opened")
 
       assert Task.from_issue(payload) == %{
-        github_id: payload["id"],
+        github_issue_number: payload["number"],
         title: payload["title"],
         markdown: payload["body"],
         status: payload["state"]
