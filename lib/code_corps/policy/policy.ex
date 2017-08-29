@@ -26,6 +26,8 @@ defmodule CodeCorps.Policy do
   @spec can?(User.t, atom, struct, map) :: boolean
   defp can?(%User{} = user, :create, %Comment{}, %{} = params), do: Policy.Comment.create?(user, params)
   defp can?(%User{} = user, :update, %Comment{} = comment, %{}), do: Policy.Comment.update?(user, comment)
+  defp can?(%User{} = user, :create, %Task{}, %{} = params), do: Policy.Task.create?(user, params)
+  defp can?(%User{} = user, :update, %Task{} = task, %{}), do: Policy.Task.update?(user, task)
 
   defimpl Canada.Can, for: User do
     # NOTE: Canary sets an :unauthorized and a :not_found handler on a config level
@@ -98,9 +100,6 @@ defmodule CodeCorps.Policy do
 
     def can?(%User{} = user, :create, %Changeset{data: %StripePlatformCustomer{}} = changeset), do: Policy.StripePlatformCustomer.create?(user, changeset)
     def can?(%User{} = user, :show, %StripePlatformCustomer{} = stripe_platform_customer), do: Policy.StripePlatformCustomer.show?(user, stripe_platform_customer)
-
-    def can?(%User{} = user, :create, %Changeset{data: %Task{}} = changeset), do: Policy.Task.create?(user, changeset)
-    def can?(%User{} = user, :update, %Task{} = task), do: Policy.Task.update?(user, task)
 
     def can?(%User{} = user, :create, %Changeset{data: %TaskSkill{}} = changeset), do: Policy.TaskSkill.create?(user, changeset)
     def can?(%User{} = user, :delete, %TaskSkill{} = task_skill), do: Policy.TaskSkill.delete?(user, task_skill)
