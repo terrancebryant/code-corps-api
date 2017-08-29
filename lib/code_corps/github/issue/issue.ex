@@ -9,6 +9,8 @@ defmodule CodeCorps.GitHub.Issue do
     markdown: markdown, title: title
     }) do
 
+    # TODO: problem is, we can't mock this using bypass
+
     client = Tentacat.Client.new(%{access_token: github_auth_token})
 
     Tentacat.Issues.create(

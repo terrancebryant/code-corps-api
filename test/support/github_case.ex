@@ -43,9 +43,38 @@ defmodule CodeCorps.GitHubCase do
 
   defp setup_handling(bypass, handler_data) do
     bypass |> Bypass.expect(fn %Plug.Conn{request_path: path} = conn ->
+      path |> IO.inspect
       {status, data} = handler_data |> Map.get(path)
       response = data |> Poison.encode!
       conn |> Plug.Conn.resp(status, response)
     end)
+  end
+
+  @doc ~S"""
+  Allows setting a mock Github API module for usage in specific tests
+
+  To use it, define a module containing the methods expected to be called, then
+  pass in the block of code expected to call it into the macro:
+
+  ```
+  defmodule MyApiModule do
+    def some_function, do: "foo"
+  end
+
+  with_mock_api(MyApiModule) do
+    execute_code_calling_api
+  end
+  ```
+  """
+  @spec with_mock_api(module, do: function) :: any
+  defmacro with_mock_api(mock_module, do: block) do
+    quote do
+      old_mock = Application.get_env(:code_corps, :github)
+      Application.put_env(:code_corps, :github, unquote(mock_module))
+
+      unquote(block)
+
+      Application.put_env(:code_corps, :github, old_mock)
+    end
   end
 end
