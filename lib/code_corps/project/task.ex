@@ -23,6 +23,10 @@ defmodule CodeCorps.Project.Task do
     end
   end
 
+  def update(%Task{} = task, %{} = attributes) do
+    task |> Task.update_changeset(attributes) |> Repo.update
+  end
+
   @spec connect_to_github(Task.t) :: {:ok, Task.t | :not_connected} :: {:error, any}
   defp connect_to_github(%Task{github_repo_id: nil}), do: {:ok, :not_connected}
   defp connect_to_github(%Task{github_repo_id: _} = task) do

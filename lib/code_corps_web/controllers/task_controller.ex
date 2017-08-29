@@ -44,11 +44,11 @@ defmodule CodeCorpsWeb.TaskController do
 
   @spec handle_create(Plug.Conn.t, map) :: {:ok, Task.t} | {:error, Ecto.Changeset.t} | {:error, :github}
   def handle_create(%Plug.Conn{} = _conn, %{} = attributes) do
-    Project.Task.create(attributes)
+    attributes |> Project.Task.create
   end
 
   @spec handle_update(Plug.Conn.t, Task.t, map) :: Ecto.Changeset.t
   def handle_update(_conn, task, attributes) do
-    task |> Task.update_changeset(attributes)
+    task |> Project.Task.update(attributes)
   end
 end
