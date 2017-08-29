@@ -3,7 +3,6 @@ defmodule CodeCorps.Policy.Task do
     only: [get_project: 1, administered_by?: 2, task_authored_by?: 2]
 
   alias CodeCorps.{Task, User}
-  alias Ecto.Changeset
 
   def create?(%User{id: user_id}, %{"user_id" => author_id})
     when user_id == author_id and not is_nil(user_id), do: true
