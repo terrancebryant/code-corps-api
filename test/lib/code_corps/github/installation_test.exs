@@ -4,7 +4,7 @@ defmodule CodeCorps.GitHub.InstallationTest do
   use CodeCorpsWeb.ApiCase
   use CodeCorps.GitHubCase
 
-  import CodeCorps.TestHelpers.GitHub
+  import CodeCorps.GitHubCase.Helpers
 
   alias CodeCorps.{
     GithubAppInstallation,

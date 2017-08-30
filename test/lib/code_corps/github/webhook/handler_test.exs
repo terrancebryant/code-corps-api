@@ -4,7 +4,7 @@ defmodule CodeCorps.GitHub.Webhook.HandlerTest do
   use CodeCorps.DbAccessCase
   use CodeCorps.GitHubCase
 
-  import CodeCorps.TestHelpers.GitHub
+  import CodeCorps.GitHubCase.Helpers
   import CodeCorps.Factories
 
   alias CodeCorps.{

@@ -247,19 +247,6 @@ defmodule CodeCorpsWeb.UserControllerTest do
 
 
   describe "github_oauth" do
-    @github_user_data %{
-      "avatar_url" => "foo_url",
-      "email" => "foo_email",
-      "id" => 123,
-      "login" => "foo_login"
-    }
-
-    @github_token_data %{"access_token" => "foo_auth_token"}
-
-    @tag bypass: %{
-      "/" => {200, @github_token_data},
-      "/user" => {200, @github_user_data}
-    }
     test "return the user when current user connects successfully", %{conn: conn} do
       user = insert(:user)
 

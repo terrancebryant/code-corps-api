@@ -8,7 +8,7 @@ defmodule CodeCorps.GitHub.Event.InstallationRepositoriesTest do
 
   import CodeCorps.{
     Factories,
-    TestHelpers.GitHub
+    GitHubCase.Helpers
   }
 
   alias CodeCorps.{

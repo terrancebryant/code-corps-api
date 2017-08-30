@@ -3,7 +3,7 @@ defmodule CodeCorps.GitHub.Event.InstallationTest do
 
   use CodeCorps.{DbAccessCase, GitHubCase}
 
-  import CodeCorps.{Factories, TestHelpers.GitHub}
+  import CodeCorps.{Factories, GitHubCase.Helpers}
 
   alias CodeCorps.{
     GithubAppInstallation,

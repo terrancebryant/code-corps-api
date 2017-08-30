@@ -9,13 +9,13 @@ defmodule CodeCorps.GitHubTest do
   describe "request/5" do
     @tag bypass: %{"/foo" => {200, %{"bar" => "baz"}}}
     test "handles a successful response" do
-      {:ok, response} = GitHub.request(%{}, :get, "foo", %{}, [])
+      {:ok, response} = GitHub.request(:get, %{}, "foo", %{}, [])
       assert response == %{"bar" => "baz"}
     end
 
     @tag bypass: %{"/foo" => {404, %{"bar" => "baz"}}}
     test "handles an error response" do
-      {:error, response} = GitHub.request(%{}, :get, "foo", %{}, [])
+      {:error, response} = GitHub.request(:get, %{}, "foo", %{}, [])
       assert response == CodeCorps.GitHub.APIError.new({404, %{"message" => %{"bar" => "baz"} |> Poison.encode!}})
     end
   end
@@ -34,16 +34,16 @@ defmodule CodeCorps.GitHubTest do
     end
   end
 
-  describe "authenticated_integration_request/5" do
+  describe "integration_request/5" do
     @tag bypass: %{"/foo" => {200, %{"bar" => "baz"}}}
     test "handles a successful response" do
-      {:ok, response} = GitHub.authenticated_integration_request(%{}, :get, "foo", %{}, [])
+      {:ok, response} = GitHub.integration_request(:get, %{}, "foo", %{}, [])
       assert response == %{"bar" => "baz"}
     end
 
     @tag bypass: %{"/foo" => {404, %{"bar" => "baz"}}}
     test "handles an error response" do
-      {:error, response} = GitHub.authenticated_integration_request(%{}, :get, "foo", %{}, [])
+      {:error, response} = GitHub.integration_request(:get, %{}, "foo", %{}, [])
       assert response == CodeCorps.GitHub.APIError.new({404, %{"message" => %{"bar" => "baz"} |> Poison.encode!}})
     end
   end

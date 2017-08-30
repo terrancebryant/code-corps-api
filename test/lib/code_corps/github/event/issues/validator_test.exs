@@ -3,7 +3,7 @@ defmodule CodeCorps.GitHub.Event.Issues.ValidatorTest do
 
   use ExUnit.Case, async: true
 
-  import CodeCorps.TestHelpers.GitHub
+  import CodeCorps.GitHubCase.Helpers
 
   alias CodeCorps.GitHub.Event.Issues.Validator
 

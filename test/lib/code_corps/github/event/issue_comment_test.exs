@@ -3,7 +3,7 @@ defmodule CodeCorps.GitHub.Event.IssueCommentTest do
 
   use CodeCorps.DbAccessCase
 
-  import CodeCorps.{Factories, TestHelpers.GitHub}
+  import CodeCorps.{Factories, GitHubCase.Helpers}
 
   alias CodeCorps.{
     Comment,

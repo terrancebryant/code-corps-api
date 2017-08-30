@@ -3,7 +3,7 @@ defmodule CodeCorps.GitHub.Event.IssueComment.ChangesetBuilderTest do
 
   use CodeCorps.DbAccessCase
 
-  import CodeCorps.{Factories, TestHelpers.GitHub}
+  import CodeCorps.{Factories, GitHubCase.Helpers}
   import Ecto.Changeset
 
   alias CodeCorps.{
